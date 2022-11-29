@@ -1,36 +1,44 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "lists.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 /**
- * main - check the code for Holberton School students.
- *
- * Return: Always 0.
- */
-int main(void)
+ * insert_node - inserts a number in an ordered linked list
+ * @head: double pointer to the linked list
+ * @number: number to insert in the new node
+ * Return: address of the new node, or NULL
+**/
+
+listint_t *insert_node(listint_t **head, int number)
 {
-    listint_t *head;
+	listint_t *current = *head;
+	listint_t *new = NULL;
+	listint_t *temp = NULL;
 
-    head = NULL;
-    add_nodeint_end(&head, 0);
-    add_nodeint_end(&head, 1);
-    add_nodeint_end(&head, 2);
-    add_nodeint_end(&head, 3);
-    add_nodeint_end(&head, 4);
-    add_nodeint_end(&head, 98);
-    add_nodeint_end(&head, 402);
-    add_nodeint_end(&head, 1024);
-    print_listint(head);
+	if (!head)
+		return (NULL);
 
-    printf("-----------------\n");
+	new = malloc(sizeof(listint_t));
+	if (!new)
+		return (NULL);
+	new->n = number;
+	new->next = NULL;
 
-    insert_node(&head, -27);
-    insert_node(&head, 127);
+	if (!*head || (*head)->n > number)
+	{
+		new->next = *head;
+		return (*head = new);
+	}
+	else
+	{
+		while (current && current->n < number)
+		{
+			temp = current;
+			current = current->next;
+		}
+		temp->next = new;
+		new->next = current;
+	}
 
-    print_listint(head);
-
-    free_listint(head);
-
-    return (0);
+	return (new);
 }
